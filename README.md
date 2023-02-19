@@ -72,6 +72,8 @@ You can also access the REST API of the API server directly. It is running on th
 
 - `/api/feed`: Fetch all _published_ posts
 - `/api/filterPosts?searchString={searchString}`: Filter posts by `title` or `content`
+- `/api/topPosts?from={date}&to={date}&limit={number}`: Get top posts
+- `/api/bestPosts?from={date}&to={date}&limit={number}`: Get best posts
 
 ### `POST`
 
