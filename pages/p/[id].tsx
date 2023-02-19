@@ -1,30 +1,30 @@
-import React from 'react'
-import { GetServerSideProps } from 'next'
-import ReactMarkdown from 'react-markdown'
-import Layout from '../../components/Layout'
-import Router from 'next/router'
-import { PostProps } from '../../components/Post'
-import { makeSerializable } from '../../lib/util'
-import prisma from '../../lib/prisma'
+import React from 'react';
+import { GetServerSideProps } from 'next';
+import ReactMarkdown from 'react-markdown';
+import Layout from '../../components/Layout';
+import Router from 'next/router';
+import { PostProps } from '../../components/Post';
+import { makeSerializable } from '../../lib/util';
+import prisma from '../../lib/prisma';
 
 async function publish(id: number): Promise<void> {
   await fetch(`/api/publish/${id}`, {
     method: 'PUT',
-  })
-  await Router.push('/')
+  });
+  await Router.push('/');
 }
 
 async function destroy(id: number): Promise<void> {
   await fetch(`/api/post/${id}`, {
     method: 'DELETE',
-  })
-  await Router.push('/')
+  });
+  await Router.push('/');
 }
 
-const Post: React.FC<PostProps> = props => {
-  let title = props.title
+const Post: React.FC<PostProps> = (props) => {
+  let title = props.title;
   if (!props.published) {
-    title = `${title} (Draft)`
+    title = `${title} (Draft)`;
   }
 
   return (
@@ -33,14 +33,8 @@ const Post: React.FC<PostProps> = props => {
         <h2>{title}</h2>
         <p>By {props?.author?.name || 'Unknown author'}</p>
         <ReactMarkdown children={props.content} />
-        {!props.published && (
-          <button onClick={() => publish(props.id)}>
-            Publish
-          </button>
-        )}
-        <button onClick={() => destroy(props.id)}>
-          Delete
-        </button>
+        {!props.published && <button onClick={() => publish(props.id)}>Publish</button>}
+        <button onClick={() => destroy(props.id)}>Delete</button>
       </div>
       <style jsx>{`
         .page {
@@ -64,16 +58,16 @@ const Post: React.FC<PostProps> = props => {
         }
       `}</style>
     </Layout>
-  )
-}
+  );
+};
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const id = Number(Array.isArray(context.params.id) ? context.params.id[0] : context.params.id)
+  const id = Array.isArray(context.params.id) ? context.params.id[0] : context.params.id;
   const post = await prisma.post.findUnique({
     where: { id },
     include: { author: true },
-  })
-  return { props: { ...makeSerializable(post) } }
-}
+  });
+  return { props: { ...makeSerializable(post) } };
+};
 
-export default Post
+export default Post;

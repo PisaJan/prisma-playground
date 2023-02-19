@@ -8,14 +8,15 @@ datasource db {
 }
 
 model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
-  posts Post[]
+  id      String   @id @default(uuid())
+  email   String   @unique
+  name    String?
+  posts   Post[]
+  ratings Rating[]
 }
 
 model Post {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   title     String
@@ -23,5 +24,16 @@ model Post {
   published Boolean  @default(false)
   viewCount Int      @default(0)
   author    User?    @relation(fields: [authorId], references: [id])
-  authorId  Int?
+  ratings   Rating[]
+  authorId  String?
+  ratingId  String?
+}
+
+model Rating {
+  id     String @id @default(uuid())
+  grade  Int
+  postId String
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+  post   Post   @relation(fields: [postId], references: [id])
 }
