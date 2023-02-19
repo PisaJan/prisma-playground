@@ -9,7 +9,8 @@
   "scripts": {
     "build": "next build",
     "serve": "next start",
-    "start": "next"
+    "start": "next",
+    "studio": "npx prisma studio"
   },
   "dependencies": {
     "@prisma/client": "4.9.0",
